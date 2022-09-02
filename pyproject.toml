@@ -1,9 +1,10 @@
 [project]
 name = "lpi"
-version = "0.0"
+version = "0.1"
 dependencies = [
     "numpy",
     "scipy",
+    "matplotlib",
     "sdfpy",
     "h5py",
 ]
