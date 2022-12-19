@@ -13,11 +13,12 @@ _field_names = {
 
 def get_sdffiles(path, prefix=''):
     sdffiles = []
-    for file in os.listdir(path):
-        if re.match(rf'{prefix}\d*\.sdf', file):
-            sdffiles.append(f'{path}/{file}')
+    with open(os.path.join(path, f'{prefix}.visit'), 'r') as f:
+        sdffiles = f.read().splitlines()
 
-    sdffiles.sort()
+    for i in range(len(sdffiles)):
+        sdffiles[i] = os.path.join(path, sdffiles[i])
+
     return sdffiles
 
 
