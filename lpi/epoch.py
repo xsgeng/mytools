@@ -22,11 +22,13 @@ def get_sdffiles(path, prefix=''):
     return sdffiles
 
 
-def get_extent(result_path, ts, prefix=''):
+def get_extent(result_path, ts=None, prefix=''):
     '''
     get 2D extent
     '''
-    if isinstance(ts, int):
+    if result_path[-4:] == '.sdf':
+        sdffile_name = result_path
+    elif isinstance(ts, int):
         ts = f'{ts:04d}'
     sdffile_name = f'{result_path}/{prefix}{ts}.sdf'
     f = sdf.read(sdffile_name, dict=True)
@@ -41,10 +43,13 @@ def get_extent(result_path, ts, prefix=''):
     return np.array(extent)
 
 
-def get_field(result_path, ts, component, prefix='', slice=()) -> np.ndarray:
-    if isinstance(ts, int):
+def get_field(result_path, component, ts=None, prefix='', slice=()) -> np.ndarray:
+    if result_path[-4:] == '.sdf':
+        sdffile_name = result_path
+    elif isinstance(ts, int):
         ts = f'{ts:04d}'
     sdffile_name = f'{result_path}/{prefix}{ts}.sdf'
+    
     f = sdf.read(sdffile_name, dict=True)
     
     if component in _field_names.keys():
