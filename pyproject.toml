@@ -4,8 +4,5 @@ version = "0.1"
 dependencies = [
     "numpy",
     "scipy",
-    "matplotlib",
-    "sdfpy",
-    "h5py",
 ]
 requires-python = ">=3.7"

@@ -1,6 +1,13 @@
 from scipy.constants import c, e, m_e, epsilon_0, pi, hbar
 from numpy import sqrt
-from . import laser, cmap, fbpic, epoch, smilei
+from . import laser, fbpic
+
+import importlib
+for lib in ["epoch", "smilei", "cmap"]:
+    try:
+        importlib.import_module(f".{lib}", "lpi")
+    except ImportError as e:
+        print(f"lpi.{lib} not available: {e}")
 
 def nc(lambda0 : float) -> float:
     omega0 = 2*pi*c/lambda0
