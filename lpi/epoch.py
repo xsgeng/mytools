@@ -15,7 +15,7 @@ def get_sdffiles(path, prefix=''):
     sdffiles = []
     with open(os.path.join(path, f'{prefix}.visit'), 'r') as f:
         sdffiles = f.read().splitlines()
-
+    
     for i in range(len(sdffiles)):
         sdffiles[i] = os.path.join(path, sdffiles[i])
 
@@ -30,7 +30,7 @@ def get_extent(result_path, ts=None, prefix=''):
         sdffile_name = result_path
     elif isinstance(ts, int):
         ts = f'{ts:04d}'
-    sdffile_name = f'{result_path}/{prefix}{ts}.sdf'
+        sdffile_name = f'{result_path}/{prefix}{ts}.sdf'
     f = sdf.read(sdffile_name, dict=True)
     
     extent = [
@@ -48,7 +48,7 @@ def get_field(result_path, component, ts=None, prefix='', slice=()) -> np.ndarra
         sdffile_name = result_path
     elif isinstance(ts, int):
         ts = f'{ts:04d}'
-    sdffile_name = f'{result_path}/{prefix}{ts}.sdf'
+        sdffile_name = f'{result_path}/{prefix}{ts}.sdf'
     
     f = sdf.read(sdffile_name, dict=True)
     
@@ -156,9 +156,10 @@ def sort(result_path, name, selected_ids=None, props=None, prefix='', comm=None)
     mpio_kws = {}
     if comm is not None:
         mpio_kws = {'driver' : 'mpio', 'comm' : comm}
-    with h5py.File(os.path.join(result_path, f'TrackParticles_{name.split("/")[-1]}.h5'), 'w', **mpio_kws) as h5f:
+    with h5py.File(os.path.join(result_path, f'TrackParticles_{prefix}_{name.split("/")[-1]}.h5'), 'w', **mpio_kws) as h5f:
         for prop in props:
-            h5f.create_dataset(prop, (nt, npart), fillvalue=np.nan)
+            h5f.create_dataset(prop, (nt, npart), fillvalue=np.nan, dtype='float64')
+        h5f.create_dataset('t', (nt, ), fillvalue=np.nan, dtype='float64')
         
         for i in range(rank, nt, comm_size):
             sdffile = sdffiles[i]
@@ -181,3 +182,4 @@ def sort(result_path, name, selected_ids=None, props=None, prefix='', comm=None)
                 else:
                     buf[orders] = f[all_props[prop]].data[()][selected]
                 h5f[prop][i, :] = buf
+            h5f['t'][i] = f['Header']['time']
