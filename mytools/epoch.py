@@ -3,7 +3,7 @@ import re
 import sdf
 import h5py
 import numpy as np
-from . import m_e, c
+from scipy.constants import m_e, c
 
 _field_names = {
         'Ex': 'Electric Field/Ex', 'Ey' : 'Electric Field/Ey' , 'Ez' : 'Electric Field/Ez' ,
