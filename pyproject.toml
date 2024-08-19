@@ -1,5 +1,5 @@
 [project]
-name = "lpi"
+name = "xsgeng-tools"
 version = "0.2"
 dependencies = [
     "numpy",
