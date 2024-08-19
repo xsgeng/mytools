@@ -23,7 +23,7 @@ def read_scalar(path, keyword):
     return np.asarray(data, dtype=float)
 
 def get_timesteps(result_path, number=0):
-    with h5py.File(os.path.join(result_path, f'Fields{number}.h5'), 'r') as h5f:
+    with h5py.File(os.path.join(result_path, f'Fields{number}.h5'), 'r', locking=False) as h5f:
         ts = list(h5f['data'].keys())   
     return ts
 
@@ -32,7 +32,7 @@ def get_extent(result_path, number=0, component='Ey', lambda0=0.8e-6):
     '''
     get 2D extent
     '''
-    with h5py.File(os.path.join(result_path, f'Fields{number}.h5'), 'r') as h5f:
+    with h5py.File(os.path.join(result_path, f'Fields{number}.h5'), 'r', locking=False) as h5f:
         ts = list(h5f['data'].keys())
         nx, ny = h5f['data'][ts[0]][component].shape
         dx, dy = h5f['data'][ts[0]][component].attrs['gridSpacing']
@@ -44,7 +44,7 @@ def get_cellsize(result_path, number=0, component='Ey', lambda0=0.8e-6):
     '''
     get 2D or 3D cell size in um
     '''
-    with h5py.File(os.path.join(result_path, f'Fields{number}.h5'), 'r') as h5f:
+    with h5py.File(os.path.join(result_path, f'Fields{number}.h5'), 'r', locking=False) as h5f:
         ts = list(h5f['data'].keys())
         dset = h5f['data'][ts[0]][component]
         if dset.dims == 2:
@@ -58,7 +58,7 @@ def get_cellsize(result_path, number=0, component='Ey', lambda0=0.8e-6):
 def get_field(result_path, ts, component, number=0, slice=()) -> np.ndarray:
     if isinstance(ts, int):
         ts = f'{ts:010d}'
-    with h5py.File(os.path.join(result_path, f'Fields{number}.h5'), 'r') as h5f:
+    with h5py.File(os.path.join(result_path, f'Fields{number}.h5'), 'r', locking=False) as h5f:
         dset = h5f['data'][ts][component]
         if len(dset.shape) == 2:
             return dset[slice].T
@@ -67,5 +67,5 @@ def get_field(result_path, ts, component, number=0, slice=()) -> np.ndarray:
 
 
 def get_traj(result_path, name, component):
-    with h5py.File(os.path.join(result_path, f'TrackParticles_{name}.h5'), 'r') as h5f:
+    with h5py.File(os.path.join(result_path, f'TrackParticles_{name}.h5'), 'r', locking=False) as h5f:
         return h5f[component][()]
