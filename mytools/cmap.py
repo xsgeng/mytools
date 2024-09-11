@@ -66,3 +66,45 @@ grey_alpha = _LinearSegmentedColormap(
         ],
     )
 )
+red_alpha = _LinearSegmentedColormap(
+    'red_alpha', 
+    dict(
+        red=[
+            (0, 0, 1), 
+            (1, 1, 1)
+        ],
+        green=[
+            (0, 0, 1),
+            (1, 0, 0)
+        ],
+        blue=[
+            (0, 0, 1),
+            (1, 0, 0)
+        ],
+        alpha = [
+            (0, 0, 0),
+            (1, 1, 1)
+        ],
+    ), 
+)
+blue_alpha = _LinearSegmentedColormap(
+    'blue_alpha', 
+    dict(
+        red=[
+            (0, 0, 1), 
+            (1, 0, 1)
+        ],
+        green=[
+            (0, 0, 1),
+            (1, 0, 0)
+        ],
+        blue=[
+            (0, 0, 1),
+            (1, 1, 0)
+        ],
+        alpha = [
+            (0, 0, 0),
+            (1, 1, 1)
+        ],
+    ), 
+)

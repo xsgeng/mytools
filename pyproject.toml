@@ -1,7 +1,7 @@
 [project]
 name = "xsgeng-tools"
 description = "my tools for pic"
-version = "0.3.1"
+version = "0.3.2"
 dependencies = [
     "numpy",
     "scipy",
