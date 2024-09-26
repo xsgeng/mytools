@@ -1,1 +1,1 @@
-from . import cmap, plasma, laser, fbpic, smilei
+from . import cmap, plasma, laser, fbpic, smilei, plot
