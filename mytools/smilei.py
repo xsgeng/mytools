@@ -2,7 +2,7 @@ import os
 import numpy as np
 from scipy.constants import pi
 import h5py
-
+from pathlib import Path
 
 def read_scalar(path, keyword):
     scalars = os.path.join(path, 'scalars.txt')
@@ -69,3 +69,16 @@ def get_field(result_path, ts, component, number=0, slice=()) -> np.ndarray:
 def get_traj(result_path, name, component):
     with h5py.File(os.path.join(result_path, f'TrackParticles_{name}.h5'), 'r', locking=False) as h5f:
         return h5f[component][()]
+
+def get_particle(result_path: [Path|str], t, name, components):
+    if isinstance(result_path, str):
+        result_path = Path(result_path)
+        
+    with h5py.File(result_path/f'TrackParticlesDisordered_{name}.h5', 'r', locking=False) as f:
+        if isinstance(t, str):
+            dset = f['data'][t]
+        else:
+            ts = list(f['data'].keys())
+            dset = f['data'][ts[t]]
+        ret = [dset['particles'][name][component][()] for component in components]
+        return ret
