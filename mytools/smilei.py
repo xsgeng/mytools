@@ -4,23 +4,29 @@ from scipy.constants import pi
 import h5py
 from pathlib import Path
 
-def read_scalar(path, keyword):
-    scalars = os.path.join(path, 'scalars.txt')
+def read_scalar(path: str, keyword: str=None) -> np.ndarray|dict:
+    '''
+    read scalar data from scalars.txt
+    if keyword is None, return a dict of all scalars
+    '''
+    path = Path(path)
+    scalars = path / 'scalars.txt'
 
-    data = []
+    keys = []
     with open(scalars, mode='r') as f:
-        data_start = False
-        data_loc = None
-        for line in f.readlines():
-            if line.find(keyword) > 0:
-                if line.strip('#').split()[0].isnumeric():
-                    continue
-                data_start = True
-                data_loc = line.strip('#').split().index(keyword)
-                continue
-            if data_start:
-                data.append(float(line.split()[data_loc]))
-    return np.asarray(data, dtype=float)
+        for lino, line in enumerate(f):
+            if line == '#\n':
+                f.readline()
+                data = np.loadtxt(f)
+                break
+            else:
+                keys.append(line.split()[2])
+
+    if keyword:
+        return data[:, keys.index(keyword)]
+    
+    # convert to dict
+    return {key: data[:, i] for i, key in enumerate(keys)}
 
 def get_timesteps(result_path, number=0):
     with h5py.File(os.path.join(result_path, f'Fields{number}.h5'), 'r', locking=False) as h5f:
